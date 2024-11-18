@@ -7,7 +7,7 @@ load_dotenv()
 ACCESS_TOKEN = os.environ.get('ACCESS_TOKEN')
 
 # URL
-url = "https://api.futmondo.com/1/userteam/roster"
+url = "https://api.futmondo.com/1/market/bid"
 
 # Payload with a header field and a query field
 data = {
@@ -17,9 +17,13 @@ data = {
     },
     "query": {
         "championshipId":"5b51f25a2a0776bf08db8a10",
+        "isClause": "false",
+        "player_id": "5659df7ca6379cbb070b8d84",
+        "player_slug": "67220143",
+        "price": "31864224",
         "userteamId": "64aecaef5b1a1779b5d0c40a"
     }
-} 
+}
 
 # Headers (generic for JSON content)
 headers = {
