@@ -40,7 +40,7 @@ def make_request(tracker):
     if response.status_code == 200:
         body = response.json()
 
-        if("error" in body["answer"] and len(tracker) < 1):
+        if("error" in body["answer"] and len(tracker) < 10):
             tracker.append([datetime.datetime.now(), body["answer"]["code"]])
             time.sleep(0.5)
             make_request(tracker)
@@ -48,6 +48,7 @@ def make_request(tracker):
         print("Request failed with status code:", response.status_code)
         print("Response:", response.text)
 
+time.sleep(30)
 tracker = []
 make_request(tracker)
 
