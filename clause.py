@@ -19,9 +19,9 @@ data = {
     },
     "query": {
         "championshipId":"5b51f25a2a0776bf08db8a10",
-        "player_id": "586d073fc1a578af33267429",
-        "player_slug": "85078880",
-        "price": "2723225",
+        "player_id": "504f65184d8bec9a670005f7",
+        "player_slug": "67103537",
+        "price": "39132212",
         "userteamId": "64aecaef5b1a1779b5d0c40a"
     }
 }
