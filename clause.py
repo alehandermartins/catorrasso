@@ -5,64 +5,49 @@ import os
 from dotenv import load_dotenv
 import csv
 
-load_dotenv()
-ACCESS_TOKEN = os.environ.get('ACCESS_TOKEN')
+class ClauseRequest:
+    def __init__(self):
+        load_dotenv()
+        self.access_token = os.environ.get('ACCESS_TOKEN')
+        self.url = "https://api.futmondo.com/1/market/rosterclause"
+        self.headers = {
+            "Content-Type": "application/json"
+        }
+        self.tracker = []
 
-def build_payload():
-
-    with open('players.csv', mode ='r') as file:
-        payload = {} 
-        csvFile = csv.reader(file)
-        for line in csvFile:
-            payload = {
-                "header": {
-                    "token": ACCESS_TOKEN,
-                    "userid": "64aeca5fa4b22c0939d64c9b"
-                },
-                "query": {
-                    "championshipId":"5b51f25a2a0776bf08db8a10",
-                    "player_id": line[0],
-                    "player_slug": line[1],
-                    "price": line[2],
-                    "userteamId": "64aecaef5b1a1779b5d0c40a"
-                }
+    def build_payload(self, player_summary):
+        return {
+            "header": {
+                "token": self.access_token,
+                "userid": "64aeca5fa4b22c0939d64c9b"
+            },
+            "query": {
+                "championshipId": "5b51f25a2a0776bf08db8a10",
+                "player_id": player_summary["player_id"],
+                "player_slug": player_summary["slug"],
+                "price": player_summary["price"],
+                "userteamId": "64aecaef5b1a1779b5d0c40a"
             }
-        
-        return payload
+        }
 
-# URL
-url = "https://api.futmondo.com/1/market/rosterclause"
+    def make_request(self, data):
+        response = requests.post(self.url, headers=self.headers, json=data)
 
-# Payload with a header field and a query field
-data = build_payload()
+        if response.status_code == 200:
+            body = response.json()
+            if "error" in body["answer"] and len(self.tracker) < 10:
+                self.tracker.append([datetime.datetime.now(), body["answer"]["code"]])
+                time.sleep(0.5)
+                self.make_request(data)
+        else:
+            print("Request failed with status code:", response.status_code)
+            print("Response:", response.text)
 
-# Headers (generic for JSON content)
-headers = {
-    "Content-Type": "application/json"
-}
+    def run(self, player_summary):
+        data = self.build_payload(player_summary)
+        time.sleep(58)
+        self.make_request(data)
 
-def make_request(tracker):
-    # Make the POST request
-    response = requests.post(url, headers=headers, json=data)
-
-    # Check the response
-    if response.status_code == 200:
-        body = response.json()
-
-        if("error" in body["answer"] and len(tracker) < 10):
-            tracker.append([datetime.datetime.now(), body["answer"]["code"]])
-            time.sleep(0.5)
-            make_request(tracker)
-    else:
-        print("Request failed with status code:", response.status_code)
-        print("Response:", response.text)
-
-time.sleep(58)
-tracker = []
-make_request(tracker)
-
-with open('clause.csv', mode='w', newline='') as file:
-    # Create a csv.writer object
-    writer = csv.writer(file)
-    # Write data to the CSV file
-    writer.writerows(tracker)
+        with open('clause.csv', mode='w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerows(self.tracker)
