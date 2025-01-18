@@ -8,29 +8,38 @@ import csv
 load_dotenv()
 ACCESS_TOKEN = os.environ.get('ACCESS_TOKEN')
 
+def build_payload():
+
+    with open('players.csv', mode ='r') as file:
+        payload = {} 
+        csvFile = csv.reader(file)
+        for line in csvFile:
+            payload = {
+                "header": {
+                    "token": ACCESS_TOKEN,
+                    "userid": "64aeca5fa4b22c0939d64c9b"
+                },
+                "query": {
+                    "championshipId":"5b51f25a2a0776bf08db8a10",
+                    "player_id": line[0],
+                    "player_slug": line[1],
+                    "price": line[2],
+                    "userteamId": "64aecaef5b1a1779b5d0c40a"
+                }
+            }
+        
+        return payload
+
 # URL
 url = "https://api.futmondo.com/1/market/rosterclause"
 
 # Payload with a header field and a query field
-data = {
-    "header": {
-        "token": ACCESS_TOKEN,
-        "userid": "64aeca5fa4b22c0939d64c9b"
-    },
-    "query": {
-        "championshipId":"5b51f25a2a0776bf08db8a10",
-        "player_id": "504f65184d8bec9a670005f7",
-        "player_slug": "67103537",
-        "price": "39132212",
-        "userteamId": "64aecaef5b1a1779b5d0c40a"
-    }
-}
+data = build_payload()
 
 # Headers (generic for JSON content)
 headers = {
     "Content-Type": "application/json"
 }
-
 
 def make_request(tracker):
     # Make the POST request
