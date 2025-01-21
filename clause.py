@@ -35,9 +35,9 @@ class ClauseRequest:
 
         if response.status_code == 200:
             body = response.json()
-            if "error" in body["answer"] and len(self.tracker) < 20:
+            if "error" in body["answer"] and len(self.tracker) < 40:
                 self.tracker.append([datetime.datetime.now(), body["answer"]["code"]])
-                time.sleep(0.5)
+                time.sleep(0.25)
                 self.make_request(data)
         else:
             print("Request failed with status code:", response.status_code)
