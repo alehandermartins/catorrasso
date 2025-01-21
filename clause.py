@@ -35,7 +35,7 @@ class ClauseRequest:
 
         if response.status_code == 200:
             body = response.json()
-            if "error" in body["answer"] and len(self.tracker) < 10:
+            if "error" in body["answer"] and len(self.tracker) < 20:
                 self.tracker.append([datetime.datetime.now(), body["answer"]["code"]])
                 time.sleep(0.5)
                 self.make_request(data)
@@ -45,7 +45,7 @@ class ClauseRequest:
 
     def run(self, player_summary):
         data = self.build_payload(player_summary)
-        time.sleep(58)
+        time.sleep(55)
         self.make_request(data)
 
         with open('clause.csv', mode='w', newline='') as file:

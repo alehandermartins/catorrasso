@@ -13,7 +13,6 @@ if __name__ == "__main__":
     player_summary = player_summary.make_request()
 
     if player_summary:
-        print(player_summary)
         clause_request.run(player_summary)
     else:
         print("Failed to get player summary")
