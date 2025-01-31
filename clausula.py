@@ -7,12 +7,11 @@ if __name__ == "__main__":
     parser.add_argument('player_id', type=str, help='The ID of the player')
     args = parser.parse_args()
 
-    clause_request = ClauseRequest()
     player_summary = PlayerSummary(args.player_id)
-    
-    player_summary = player_summary.make_request()
+    summary = player_summary.make_request()
 
     if player_summary:
-        clause_request.run(player_summary)
+        clause_request = ClauseRequest(summary)
+        clause_request.run()
     else:
         print("Failed to get player summary")
