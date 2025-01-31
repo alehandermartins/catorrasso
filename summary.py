@@ -24,15 +24,3 @@ class PlayerSummary:
             }
         else:
             return None
-
-def main():
-    player_id = "577e7dbc371184071da8a80a"  # Example player ID
-    player_summary = PlayerSummary(player_id)
-    result = player_summary.make_request()
-    if result:
-        print(result)
-    else:
-        print("Failed to get player summary data")
-
-if __name__ == "__main__":
-    main()
